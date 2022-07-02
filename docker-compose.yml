@@ -8,9 +8,9 @@ services:
       - MYSQL_ROOTPASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
-      -$MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-      -db:/var/lib/mysql
+      - db:/var/lib/mysql
     networks:
       - backend
     
