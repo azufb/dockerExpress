@@ -1,7 +1,18 @@
 require("dotenv").config();
 const express = require('express');
+const mysql2 = require('mysql2');
 const app = express();
 const port = process.env.NODE_DOCKER_PORT || 8080;
+
+const config = mysql2.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
+});
+
+config.connect();
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
