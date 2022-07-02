@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     env_file: ./.env
     environment: 
-      - MYSQL_ROOTPASSWORD=$MYSQLDB_ROOTPASSWORD
+      - MYSQL_ROOTPASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
       -$MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
@@ -25,7 +25,7 @@ services:
     environment:
       - DB_HOST=mysqldb
       - DB_USER=$MYSQLDB_USER
-      - DB_PASSWORD=$MYSQLDB_ROOTPASSWORD
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - CLIENT_ORIGIN=$CLIENT_ORIGIN
@@ -44,7 +44,7 @@ services:
       - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
     networks:
       - frontend
-      
+
 volumes:
   db:
 
