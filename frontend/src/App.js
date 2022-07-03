@@ -1,10 +1,9 @@
 import './App.css';
-import Sample from './components/Sample';
 
 function App() {
   return (
     <div className="App">
-      <Sample />
+      <h1>こんにちは、世界。</h1>
     </div>
   );
 }
