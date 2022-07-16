@@ -13,7 +13,10 @@ const config = mysql2.createConnection({
     port: process.env.DB_PORT
 });
 
-config.connect();
+config.connect(() => {
+    const createTable = 'CREATE TABLE users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)'
+    config.query(createTable);
+});
 
 app.use(cors());
 app.options('*', cors());
