@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require('express');
 const mysql2 = require('mysql2');
 const app = express();
+const cors = require('cors');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const config = mysql2.createConnection({
@@ -13,6 +14,9 @@ const config = mysql2.createConnection({
 });
 
 config.connect();
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -30,8 +34,8 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello World!!' })
 });
 
-app.get('/api', (req, res) => {
-    res.json({ message: 'Hello!' });
+app.post('/api', (req, res) => {
+    res.send('Got a POST request');
 });
   
 app.listen(port, () => {
