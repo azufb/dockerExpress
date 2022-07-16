@@ -37,6 +37,40 @@ app.get('/', (req, res) => {
 app.post('/api', (req, res) => {
     res.send('Got a POST request');
 });
+
+app.post('/signUp', (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+    const data = [name, email, password];
+    const sql = 'INSERT INTO users(name, email, password) VALUES(?, ?, ?)';
+
+    config.query(sql, data, (err, results) => {
+        if (err) throw err;
+        res.send(JSON.stringify({
+            'status': 200,
+            'error': null,
+            'response': results
+        }));
+    });
+});
+
+app.post('signIn', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const data = [email, password];
+    const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
+    config.query(sql, data, (err, rows, results) => {
+        if(err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 503, "error": null, "response": 'サインイン失敗...。'}));
+        } else {
+            res.send(JSON.stringify({"status": 200, "error": null, "response": 'サインイン成功！'}));
+        }
+
+    });
+})
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
