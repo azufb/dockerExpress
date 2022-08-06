@@ -75,7 +75,7 @@ app.post('/signUp', (req, res) => {
     });
 });
 
-app.post('signIn', (req, res) => {
+app.post('/signIn', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const data = [email, password];
