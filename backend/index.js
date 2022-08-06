@@ -41,6 +41,23 @@ app.post('/api', (req, res) => {
     res.send('Got a POST request');
 });
 
+app.post('/check', (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+    const data = [name, email, password];
+    const sql = 'SELECT * FROM users WHERE name = ? AND email = ? AND password = ?';
+
+    config.query(sql, data , (err, rows, result) => {
+        if (err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 200, "error": null, "response": 'そのデータはまだ存在しないよ！'}));
+        }
+    });
+
+});
+
 app.post('/signUp', (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
