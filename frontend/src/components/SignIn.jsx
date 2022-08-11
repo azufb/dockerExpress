@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 const SignIn = () => {
     const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         await axios
@@ -11,6 +13,7 @@ const SignIn = () => {
             .then(res => {
                 console.log(res.data.response);
             });
+        navigate('/Authenticated');
     }
 
     return (
