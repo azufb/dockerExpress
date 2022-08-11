@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 const SignUp = () => {
     const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         let resData;
@@ -20,6 +22,9 @@ const SignUp = () => {
             .then(res => {
                 console.log(res);
             });
+
+            navigate('/Authenticated');
+
         } else {
             console.log('データが存在したみたいです。');
         }
