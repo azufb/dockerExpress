@@ -8,12 +8,14 @@ const SignIn = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
+        let signInRes;
         await axios
             .post('http://localhost:6868/signIn', data)
             .then(res => {
-                console.log(res.data.response);
+                console.log(res);
+                signInRes = res;
             });
-        navigate('/Authenticated');
+        navigate(`/Authenticated/${signInRes.data.response.id}`);
     }
 
     return (
