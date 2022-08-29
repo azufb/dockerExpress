@@ -8,22 +8,24 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        let resData;
+        let checkRes;
+        let signUpRes;
         await axios
             .post('http://localhost:6868/check', data)
             .then(res => {
                 console.log(res);
-                resData = res;
+                checkRes = res;
             });
         
-        if (resData.status === 200) {
+        if (checkRes.status === 200) {
             await axios
             .post('http://localhost:6868/signUp', data)
             .then(res => {
                 console.log(res);
+                signUpRes = res;
             });
 
-            navigate('/Authenticated');
+            navigate(`/Authenticated/${signUpRes.data.response.insertId}`);
 
         } else {
             console.log('データが存在したみたいです。');

@@ -90,7 +90,7 @@ app.post('/signIn', (req, res) => {
         }
 
     });
-})
+});
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
