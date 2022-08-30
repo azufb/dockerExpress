@@ -1,5 +1,6 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import itemCategoryData from "../jsData/itemCategoryData";
+import axios from 'axios';
 
 const ItemRegisterForm = () => {
     const { register, handleSubmit, control } = useForm({
@@ -27,10 +28,18 @@ const ItemRegisterForm = () => {
         }
     }
 
+    const onSubmit = async (data) => {
+        await axios
+        .post('http://localhost:6868/registerItem', data.itemRegister)
+        .then(res => {
+            console.log(res);
+        });
+    }
+
     return (
         <div>
             <h1>商品登録フォーム</h1>
-            <form onSubmit={ handleSubmit() }>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     {fields.map((form, index) => (
                         <div key={index}>

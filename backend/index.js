@@ -5,6 +5,9 @@ const app = express();
 const cors = require('cors');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
+const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, comment VARCHAR(100) NOT NULL)';
+
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -13,10 +16,10 @@ const config = mysql2.createConnection({
     port: process.env.DB_PORT
 });
 
-config.connect(() => {
-    const createTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)'
-    config.query(createTable);
-});
+config.connect();
+
+config.query(createUsersTable);
+config.query(createItemsTable);
 
 app.use(cors());
 app.options('*', cors());
@@ -32,14 +35,6 @@ app.use(function(req, res, next) {
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
-app.get('/', (req, res) => {
-    res.json({ message: 'Hello World!!' })
-});
-
-app.post('/api', (req, res) => {
-    res.send('Got a POST request');
-});
 
 app.post('/check', (req, res) => {
     const name = req.body.name;
@@ -91,6 +86,27 @@ app.post('/signIn', (req, res) => {
 
     });
 });
+
+app.post('/registerItem', (req, res) => {
+    req.body.forEach(request => {
+        const itemName = request.itemName;
+        const itemPrice = request.itemPrice;
+        const itemType = request.itemType;
+        const itemCategory = request.itemCategory;
+        const comment = request.comment;
+        const data = [itemName, itemPrice, itemType, itemCategory, comment];
+        const sql = 'INSERT INTO items(itemName, itemPrice, itemType, itemCategory, comment) VALUES(?, ?, ?, ?, ?)';
+
+        config.query(sql, data, (err, results) => {
+            if (err) throw err;
+            res.send(JSON.stringify({
+                'status': 200,
+                'error': null,
+                'response': results
+            }));
+        });
+    });
+})
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
