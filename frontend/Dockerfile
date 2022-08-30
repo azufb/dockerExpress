@@ -6,7 +6,8 @@ COPY . .
 ARG REACT_APP_API_BASE_URL
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 RUN npm run build
-FROM nginx:1.23.0-alpine
+FROM nginx:latest
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /frontend/build /usr/share/nginx/html
 EXPOSE $REACT_DOCKER_PORT
 CMD nginx -g 'daemon off;'
