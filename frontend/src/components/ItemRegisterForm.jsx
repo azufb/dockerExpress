@@ -1,5 +1,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import itemCategoryData from "../jsData/itemCategoryData";
+import { useRecoilValue } from "recoil";
+import { userInfoAtom } from "../atoms/userInfoAtom";
 import axios from 'axios';
 
 const ItemRegisterForm = () => {
@@ -22,6 +24,8 @@ const ItemRegisterForm = () => {
         name: 'itemRegister'
     });
 
+    const userInfo = useRecoilValue(userInfoAtom);
+
     const appendForm = () => {
         if (fields.length + 1 <= 10) {
             return append({ itemName: '', itemPrice: '', itemType: '', itemCategory: '', comment: '' });
@@ -29,6 +33,10 @@ const ItemRegisterForm = () => {
     }
 
     const onSubmit = async (data) => {
+        data.itemRegister.forEach((item) => {
+            item.userId = userInfo;
+        });
+
         await axios
         .post('http://localhost:6868/registerItem', data.itemRegister)
         .then(res => {

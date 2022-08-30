@@ -6,7 +6,7 @@ const cors = require('cors');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
-const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, comment VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, comment VARCHAR(100) NOT NULL)';
 
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
@@ -89,13 +89,14 @@ app.post('/signIn', (req, res) => {
 
 app.post('/registerItem', (req, res) => {
     req.body.forEach(request => {
+        const userId = request.userId;
         const itemName = request.itemName;
         const itemPrice = request.itemPrice;
         const itemType = request.itemType;
         const itemCategory = request.itemCategory;
         const comment = request.comment;
-        const data = [itemName, itemPrice, itemType, itemCategory, comment];
-        const sql = 'INSERT INTO items(itemName, itemPrice, itemType, itemCategory, comment) VALUES(?, ?, ?, ?, ?)';
+        const data = [userId, itemName, itemPrice, itemType, itemCategory, comment];
+        const sql = 'INSERT INTO items(userId, itemName, itemPrice, itemType, itemCategory, comment) VALUES(?, ?, ?, ?, ?, ?)';
 
         config.query(sql, data, (err, results) => {
             if (err) throw err;
