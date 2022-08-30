@@ -1,10 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
+import { userInfoAtom } from '../atoms/userInfoAtom';
 import axios from 'axios';
 
 const SignIn = () => {
     const { register, handleSubmit } = useForm();
+    const setUserId = useSetRecoilState(userInfoAtom);
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
@@ -15,6 +18,7 @@ const SignIn = () => {
                 console.log(res);
                 signInRes = res;
             });
+        setUserId(signInRes.data.response.id);
         navigate(`/Authenticated/${signInRes.data.response.id}`);
     }
 
