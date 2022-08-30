@@ -1,7 +1,19 @@
 import { useForm, useFieldArray } from "react-hook-form";
 
 const ItemRegisterForm = () => {
-    const { register, handleSubmit, control } = useForm();
+    const { register, handleSubmit, control } = useForm({
+        defaultValues: {
+            itemRegister: [
+                {
+                    itemName: '',
+                    itemPrice: '',
+                    itemType: 'actual',
+                    itemCategory: '',
+                    comment: ''
+                }
+            ]
+        }
+    });
     const { fields, append } = useFieldArray({
         control,
         name: 'itemRegister'
