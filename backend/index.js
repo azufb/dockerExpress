@@ -107,7 +107,27 @@ app.post('/registerItem', (req, res) => {
             }));
         });
     });
-})
+});
+
+app.post('/getItems', (req, res) => {
+    const userId = req.body.userId;
+    const data = [userId];
+    const sql = "SELECT * FROM items WHERE userId = ?";
+
+    config.query(sql, data, (err, rows, ) => {
+        if(err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 503, "error": null, "response": '取得失敗...。'}));
+        } else {
+            res.send(JSON.stringify({
+                "status": 200,
+                "error": null,
+                "response": rows[0]
+            }));
+        }
+    });
+});
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
