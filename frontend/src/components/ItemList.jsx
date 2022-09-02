@@ -11,7 +11,6 @@ const ItemList = () => {
     //const itemList = useRecoilValue(itemSelector);
 
     useEffect(() => {
-        let data;
         const param = {
             'userId': userId
         };
@@ -21,7 +20,6 @@ const ItemList = () => {
             .post('http://localhost:6868/getItems', param)
             .then(res => {
                 console.log(res.data.response);
-
                 setItemList((oldItem) => [
                     ...oldItem, 
                     {
@@ -32,8 +30,6 @@ const ItemList = () => {
                         comment: res.data.response.comment
                     }
                 ]);
-                console.log(itemList.length);
-                console.log(itemList);
             });
         };
         getItems();
@@ -42,6 +38,19 @@ const ItemList = () => {
     return (
         <div>
             <div>一覧</div>
+            <div>
+                {itemList.length !== 0 ? (itemList.map((item, index) => (
+                    <div key={index}>
+                        <p>{item.itemName}</p>
+                        <p>{item.itemPrice}</p>
+                        <p>{item.itemType}</p>
+                        <p>{item.itemCategory}</p>
+                        <p>{item.comment}</p>
+                    </div>
+                ))) :(
+                    <p>何もアイテムがないよ。</p>
+                )}
+            </div>
         </div>
     );
 };
