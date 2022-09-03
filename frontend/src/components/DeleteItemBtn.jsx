@@ -1,7 +1,17 @@
+import { useRecoilValue, useRecoilState } from "recoil";
+import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 
 const DeleteItemBtn = (props) => {
+    const [itemList, setItemList] = useRecoilState(itemListAtom);
+
     const deleteItem = async () => {
+        const deletedItemList = itemList.filter((list, index) => {
+            return index !== props.index;
+        });
+
+        setItemList(deletedItemList);
+
         const param = {
             userId: props.userId,
             itemId: props.itemId

@@ -45,7 +45,7 @@ const ItemList = () => {
             });
         };
         getItems();
-    }, [itemList]);
+    }, [itemList, setItemList, userId]);
 
     return (
         <div>
