@@ -3,6 +3,7 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import { userInfoAtom } from "../atoms/userInfoAtom";
 import { itemListAtom } from "../atoms/itemAtom";
 import DeleteItemBtn from "./DeleteItemBtn";
+import EditItemBtn from "./EditItemBtn";
 import axios from 'axios';
 
 const ItemList = () => {
@@ -56,6 +57,7 @@ const ItemList = () => {
                     <th>商品カテゴリ</th>
                     <th>コメント</th>
                     <th></th>
+                    <th></th>
                 </thead>
                 <tbody>
                 {itemList.map((item, index) => (
@@ -67,6 +69,9 @@ const ItemList = () => {
                         <td>{item.comment}</td>
                         <td>
                             <DeleteItemBtn userId={item.userId} itemId={item.itemId} />
+                        </td>
+                        <td>
+                            <EditItemBtn />
                         </td>
                     </tr>
                 ))}
