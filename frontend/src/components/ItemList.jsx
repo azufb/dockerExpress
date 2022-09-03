@@ -4,6 +4,7 @@ import { userInfoAtom } from "../atoms/userInfoAtom";
 import { itemListAtom } from "../atoms/itemAtom";
 import DeleteItemBtn from "./DeleteItemBtn";
 import EditItemBtn from "./EditItemBtn";
+import ItemDetailBtn from "./ItemDetailBtn";
 import axios from 'axios';
 
 const ItemList = () => {
@@ -58,6 +59,7 @@ const ItemList = () => {
                     <th>コメント</th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </thead>
                 <tbody>
                 {itemList.map((item, index) => (
@@ -72,6 +74,9 @@ const ItemList = () => {
                         </td>
                         <td>
                             <EditItemBtn />
+                        </td>
+                        <td>
+                            <ItemDetailBtn item={item} />
                         </td>
                     </tr>
                 ))}
