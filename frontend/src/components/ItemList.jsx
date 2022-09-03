@@ -45,7 +45,7 @@ const ItemList = () => {
             });
         };
         getItems();
-    }, []);
+    }, [itemList]);
 
     return (
         <div>
@@ -70,7 +70,7 @@ const ItemList = () => {
                         <td>{item.itemCategory}</td>
                         <td>{item.comment}</td>
                         <td>
-                            <DeleteItemBtn userId={item.userId} itemId={item.itemId} />
+                            <DeleteItemBtn userId={item.userId} itemId={item.itemId} index={index} />
                         </td>
                         <td>
                             <EditItemBtn />
