@@ -114,7 +114,7 @@ app.post('/getItems', (req, res) => {
     const data = [userId];
     const sql = "SELECT * FROM items WHERE userId = ?";
 
-    config.query(sql, data, (err, rows, ) => {
+    config.query(sql, data, (err, rows) => {
         if(err) throw err;
 
         if (rows.length === 0) {
@@ -123,10 +123,28 @@ app.post('/getItems', (req, res) => {
             res.send(JSON.stringify({
                 "status": 200,
                 "error": null,
-                "response": rows[0]
+                "response": rows
             }));
         }
     });
+});
+
+app.post('/deleteItems', (req, res) => {
+    const userId = req.body.userId;
+    const itemId = req.body.itemId;
+    const data = [userId, itemId];
+    const sql = 'DELETE FROM items WHERE userId = ? AND id = ?';
+
+    config.query(sql, data, (err, results) => {
+        if(err) throw err;
+
+        res.send(JSON.stringify({
+            'status': 200,
+            'error': null,
+            'response': results
+        }));
+    });
+
 });
   
 app.listen(port, () => {
