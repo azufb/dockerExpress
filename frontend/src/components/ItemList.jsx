@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { userInfoAtom } from "../atoms/userInfoAtom";
 import { itemListAtom } from "../atoms/itemAtom";
+import DeleteItemBtn from "./DeleteItemBtn";
 import axios from 'axios';
 
 const ItemList = () => {
@@ -18,16 +19,27 @@ const ItemList = () => {
             .post('http://localhost:6868/getItems', param)
             .then(res => {
                 console.log(res.data.response);
-                setItemList((oldItem) => [
-                    ...oldItem, 
-                    {
-                        itemName: res.data.response.itemName,
-                        itemPrice: res.data.response.itemPrice,
-                        itemType: res.data.response.itemType,
-                        itemCategory: res.data.response.itemCategory,
-                        comment: res.data.response.comment
-                    }
-                ]);
+                const resItemData = res.data.response;
+                let list = [];
+                
+                resItemData.forEach((responseItem) => {
+                    list = [
+                        ...list,
+                        {
+                            itemId: responseItem.id,
+                            userId: responseItem.userId,
+                            itemName: responseItem.itemName,
+                            itemPrice: responseItem.itemPrice,
+                            itemType: responseItem.itemType,
+                            itemCategory: responseItem.itemCategory,
+                            comment: responseItem.comment
+                        }
+                    ];
+
+                    return list;
+                });
+
+                setItemList(list);
             });
         };
         getItems();
@@ -43,6 +55,7 @@ const ItemList = () => {
                     <th>タイプ</th>
                     <th>商品カテゴリ</th>
                     <th>コメント</th>
+                    <th></th>
                 </thead>
                 <tbody>
                 {itemList.map((item, index) => (
@@ -52,6 +65,9 @@ const ItemList = () => {
                         <td>{item.itemType}</td>
                         <td>{item.itemCategory}</td>
                         <td>{item.comment}</td>
+                        <td>
+                            <DeleteItemBtn userId={item.userId} itemId={item.itemId} />
+                        </td>
                     </tr>
                 ))}
                 </tbody>
