@@ -1,16 +1,14 @@
-import ItemRegisterForm from "./ItemRegisterForm";
-import ItemList from "./ItemList";
-import { useRecoilValue } from "recoil";
-import { userInfoAtom } from "../atoms/userInfoAtom";
+import SideMenu from "./SideMenu";
+import { Outlet, useParams } from "react-router-dom";
 
 const Authenticated = () => {
-    const userInfo = useRecoilValue(userInfoAtom);
+    const paramObj = useParams();
     return (
         <div>
             <h1>For Authenticated Member!</h1>
-            <p>ID:{userInfo}</p>
-            <ItemRegisterForm />
-            <ItemList />
+            <p>ID:{paramObj.userId}</p>
+            <SideMenu />
+            <Outlet />
         </div>
     )
 }
