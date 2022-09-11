@@ -1,19 +1,19 @@
 import { useEffect } from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { userInfoAtom } from "../atoms/userInfoAtom";
+import { useRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
 import DeleteItemBtn from "./DeleteItemBtn";
 import EditItemBtn from "./EditItemBtn";
 import ItemDetailBtn from "./ItemDetailBtn";
 import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 const ItemList = () => {
-    const userId = useRecoilValue(userInfoAtom);
     const [itemList, setItemList] = useRecoilState(itemListAtom);
+    const paramObj = useParams();
 
     useEffect(() => {
         const param = {
-            'userId': userId
+            'userId': paramObj.userId
         };
 
         const getItems = async () => {
@@ -45,7 +45,7 @@ const ItemList = () => {
             });
         };
         getItems();
-    }, [itemList, setItemList, userId]);
+    }, [itemList, paramObj.userId, setItemList]);
 
     return (
         <div>

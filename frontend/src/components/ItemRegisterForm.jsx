@@ -1,9 +1,9 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import itemCategoryData from "../jsData/itemCategoryData";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userInfoAtom } from "../atoms/userInfoAtom";
+import { useSetRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 const ItemRegisterForm = () => {
     const { register, handleSubmit, control } = useForm({
@@ -25,8 +25,8 @@ const ItemRegisterForm = () => {
         name: 'itemRegister'
     });
 
-    const userInfo = useRecoilValue(userInfoAtom);
     const setItemList = useSetRecoilState(itemListAtom);
+    const paramObj = useParams();
 
     const appendForm = () => {
         if (fields.length + 1 <= 10) {
@@ -38,7 +38,7 @@ const ItemRegisterForm = () => {
         let list = [];
 
         data.itemRegister.forEach((item) => {
-            item.userId = userInfo;
+            item.userId = paramObj.userId;
 
             list = [
                 ...list,
