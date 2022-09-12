@@ -6,6 +6,7 @@ import EditItemBtn from "./EditItemBtn";
 import ItemDetailBtn from "./ItemDetailBtn";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import ItemFilterBar from "./ItemFilterBar";
 
 const ItemList = () => {
     const [itemList, setItemList] = useRecoilState(itemListAtom);
@@ -45,10 +46,11 @@ const ItemList = () => {
             });
         };
         getItems();
-    }, [itemList, paramObj.userId, setItemList]);
+    }, [paramObj.userId]);
 
     return (
         <div>
+            <ItemFilterBar />
             <div>一覧</div>
             <table>
                 <thead>
