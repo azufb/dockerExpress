@@ -146,6 +146,27 @@ app.post('/deleteItems', (req, res) => {
     });
 
 });
+
+app.post('/filtering', (req, res) => {
+    const keywords = req.body.keywords;
+    console.log(keywords);
+    const sql = 'SELECT * FROM items WHERE itemCategory IN (?)';
+
+    const data = [keywords];
+    config.query(sql, data, (err, rows) => {
+        if(err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 503, "error": null, "response": '取得失敗...。'}));
+        } else {
+            res.send(JSON.stringify({
+                "status": 200,
+                "error": null,
+                "response": rows
+            }));
+        }
+    });
+});
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
