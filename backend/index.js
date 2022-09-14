@@ -149,10 +149,10 @@ app.post('/deleteItems', (req, res) => {
 
 app.post('/filtering', (req, res) => {
     const keywords = req.body.keywords;
-    console.log(keywords);
-    const sql = 'SELECT * FROM items WHERE itemCategory IN (?)';
+    const userId = req.body.userId;
+    const sql = 'SELECT * FROM items WHERE userId = ? AND itemCategory IN (?)';
 
-    const data = [keywords];
+    const data = [userId, keywords];
     config.query(sql, data, (err, rows) => {
         if(err) throw err;
 
