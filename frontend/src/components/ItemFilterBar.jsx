@@ -1,7 +1,10 @@
 import itemCategoryData from "../jsData/itemCategoryData";
+import { useSetRecoilState } from "recoil";
+import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 
 const ItemFilterBar = () => {
+    const setItemList = useSetRecoilState(itemListAtom);
     let categoryList = [];
 
     const selectCategory = (category, index) => {
@@ -13,7 +16,7 @@ const ItemFilterBar = () => {
     };
 
     const filtering = async () => {
-        //
+        let resData;
         const param = {
             keywords: categoryList
         };
@@ -22,7 +25,10 @@ const ItemFilterBar = () => {
         .post('http://localhost:6868/filtering', param)
         .then(res => {
             console.log('res:', res);
+            resData = res.data.response;
         });
+
+        setItemList(resData);
     };
 
     return (
