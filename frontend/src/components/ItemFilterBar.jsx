@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import itemCategoryData from "../jsData/itemCategoryData";
 import { useSetRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
@@ -5,6 +6,7 @@ import axios from 'axios';
 
 const ItemFilterBar = () => {
     const setItemList = useSetRecoilState(itemListAtom);
+    const paramObj = useParams();
     let categoryList = [];
 
     const selectCategory = (category, index) => {
@@ -17,18 +19,34 @@ const ItemFilterBar = () => {
 
     const filtering = async () => {
         let resData;
-        const param = {
+        const keywordsParam = {
+            userId: paramObj.userId,
             keywords: categoryList
         };
 
-        await axios
-        .post('http://localhost:6868/filtering', param)
-        .then(res => {
-            console.log('res:', res);
-            resData = res.data.response;
-        });
+        const userIdParam = {
+            userId: paramObj.userId
+        }
 
-        setItemList(resData);
+        if (keywordsParam.keywords.length !== 0) {
+            await axios
+            .post('http://localhost:6868/filtering', keywordsParam)
+            .then(res => {
+                console.log(res);
+                resData = res.data.response;
+            });
+
+            setItemList(resData);
+        } else {
+            await axios
+            .post('http://localhost:6868/getItems', userIdParam)
+            .then(res => {
+                console.log('res:', res);
+                resData = res.data.response;
+            });
+
+            setItemList(resData);
+        }
     };
 
     return (
