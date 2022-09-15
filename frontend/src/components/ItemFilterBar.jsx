@@ -19,6 +19,7 @@ const ItemFilterBar = () => {
 
     const filtering = async () => {
         let resData;
+        let allData;
         const keywordsParam = {
             userId: paramObj.userId,
             keywords: categoryList
@@ -33,19 +34,29 @@ const ItemFilterBar = () => {
             .post('http://localhost:6868/filtering', keywordsParam)
             .then(res => {
                 console.log(res);
-                resData = res.data.response;
+                resData = res.data;
             });
 
-            setItemList(resData);
+            if (resData.status === 200) {
+                setItemList(resData.response);
+            } else {
+                await axios
+                .post('http://localhost:6868/getItems', userIdParam)
+                .then(res => {
+                    console.log('res:', res);
+                    allData = res.data;
+                });
+
+                setItemList(allData.response);
+            }
         } else {
             await axios
             .post('http://localhost:6868/getItems', userIdParam)
             .then(res => {
-                console.log('res:', res);
-                resData = res.data.response;
+                allData = res.data.response;
             });
 
-            setItemList(resData);
+            setItemList(allData);
         }
     };
 
