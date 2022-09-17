@@ -5,7 +5,7 @@ import DeleteItemBtn from "./DeleteItemBtn";
 import EditItemBtn from "./EditItemBtn";
 import ItemDetailBtn from "./ItemDetailBtn";
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useParams, Outlet } from "react-router-dom";
 import ItemFilterBar from "./ItemFilterBar";
 
 const ItemList = () => {
@@ -78,12 +78,13 @@ const ItemList = () => {
                             <EditItemBtn />
                         </td>
                         <td>
-                            <ItemDetailBtn item={item} />
+                            <ItemDetailBtn itemId={item.itemId} />
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            <Outlet />
         </div>
     );
 };
