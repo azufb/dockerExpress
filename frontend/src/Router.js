@@ -17,7 +17,7 @@ const Router = () => {
                 <Route path='Authenticated/:userId' element={<Authenticated />}>
                     <Route path='ItemList' element={<ItemList />} />
                     <Route path='ItemRegisterForm' element={<ItemRegisterForm />} />
-                    <Route path='ItemDetail' element={<ItemDetail />} />
+                    <Route path='ItemDetail/:itemId' element={<ItemDetail />} />
                 </Route>
             </Routes>
         </BrowserRouter>
