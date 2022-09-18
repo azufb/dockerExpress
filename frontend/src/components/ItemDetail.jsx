@@ -1,26 +1,16 @@
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
-import { itemListAtom, filteredItemAtom } from "../atoms/itemAtom";
-import { useEffect } from "react";
+import { itemListAtom } from "../atoms/itemAtom";
 
 const ItemDetail = () => {
     const items = useRecoilValue(itemListAtom);
-    const [filteredItem, setFilteredItem] = useRecoilState(filteredItemAtom);
     const paramObj = useParams();
     const itemId = paramObj.itemId;
-
-    useEffect(() => {
-        const filtered = items.filter((item) => {
-            return item.itemId === itemId;
-        });
-
-        setFilteredItem(filtered);
-    }, []);
 
     return (
         <div>
             <h1>商品詳細</h1>
-            {filteredItem.map((item) => (
+            {items.filter((list) => list.itemId === parseInt(itemId)).map((item) => (
                 <>
                     <label>商品名</label>
                     <p>{item.itemName}</p>
