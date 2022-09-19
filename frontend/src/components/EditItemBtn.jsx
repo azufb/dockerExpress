@@ -1,9 +1,8 @@
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { isOpenModalsAtom } from '../atoms/isOpenModals';
-import axios from 'axios';
 
 const EditItemBtn = () => {
-    const [isOpenEditItemModal, setIsOpenEditItemModal] = useRecoilState(isOpenModalsAtom);
+    const setIsOpenEditItemModal = useSetRecoilState(isOpenModalsAtom);
 
     const openEditItemModal = () => {
         const paramBool = {
