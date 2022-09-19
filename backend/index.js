@@ -3,6 +3,7 @@ const express = require('express');
 const mysql2 = require('mysql2');
 const app = express();
 const cors = require('cors');
+const bcryptjs = require('bcryptjs');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
@@ -39,14 +40,18 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/check', (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
-    const password = req.body.password;
-    const data = [name, email, password];
-    const sql = 'SELECT * FROM users WHERE name = ? AND email = ? AND password = ?';
+    const data = [name, email];
+    const sql = 'SELECT * FROM users WHERE name = ? AND email = ?';
 
-    config.query(sql, data , (err, rows, result) => {
+    config.query(sql, data , (err, rows) => {
         if (err) throw err;
 
-        if (rows.length === 0) {
+        const resultRow = rows.find(async (row) => {
+            const bool = await bcryptjs.compare(req.body.password, row.password);
+            return bool === true;
+        });
+
+        if (rows.length === 0 && resultRow === undefined) {
             res.send(JSON.stringify({"status": 200, "error": null, "response": 'そのデータはまだ存在しないよ！'}));
         }
     });
@@ -56,8 +61,8 @@ app.post('/check', (req, res) => {
 app.post('/signUp', (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
-    const password = req.body.password;
-    const data = [name, email, password];
+    const hashedPassword = bcryptjs.hashSync(req.body.password, 10);
+    const data = [name, email, hashedPassword];
     const sql = 'INSERT INTO users(name, email, password) VALUES(?, ?, ?)';
 
     config.query(sql, data, (err, results) => {
@@ -72,16 +77,21 @@ app.post('/signUp', (req, res) => {
 
 app.post('/signIn', (req, res) => {
     const email = req.body.email;
-    const password = req.body.password;
-    const data = [email, password];
-    const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
-    config.query(sql, data, (err, rows, result) => {
+    const data = [email];
+    const sql = 'SELECT * FROM users WHERE email = ?';
+    config.query(sql, data, (err, rows) => {
         if(err) throw err;
 
         if (rows.length === 0) {
             res.send(JSON.stringify({"status": 503, "error": null, "response": 'サインイン失敗...。'}));
         } else {
-            res.send(JSON.stringify({"status": 200, "error": null, "response": rows[0]}));
+            const resultRow = rows.find(async (row) => {
+                console.log(row);
+                const bool = await bcryptjs.compare(req.body.password, row.password);
+                return bool === true;
+            });
+
+            res.send(JSON.stringify({"status": 200, "error": null, "response": resultRow}));
         }
 
     });
