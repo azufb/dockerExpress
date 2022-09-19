@@ -15,7 +15,10 @@ const SignIn = () => {
                 console.log(res);
                 signInRes = res;
             });
-        navigate(`/Authenticated/${signInRes.data.response.id}`);
+
+        if (signInRes.data.status === 200) {
+            navigate(`/Authenticated/${signInRes.data.response.id}`);
+        }
     }
 
     return (
