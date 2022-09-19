@@ -5,7 +5,13 @@ export const itemListAtom = atom({
     default: []
 });
 
-export const filteredItemAtom = atom({
-    key: 'filteredItemAtom',
-    default: []
+export const itemDetailAtom = atom({
+    key: 'itemDetail',
+    default: {
+        itemName: '',
+        itemPrice: '',
+        itemType: '',
+        itemCategory: '',
+        comment: ''
+    }
 });
