@@ -167,6 +167,32 @@ app.post('/filtering', (req, res) => {
         }
     });
 });
+
+app.post('/updateItemData', (req, res) => {
+    const itemName = req.body.itemName;
+    const itemPrice = req.body.itemPrice;
+    const itemType = req.body.itemType;
+    const itemCategory = req.body.itemCategory;
+    const comment = req.body.comment;
+    const userId = req.body.userId;
+    const itemId = req.body.itemId;
+    const data = [itemName, itemPrice, itemType, itemCategory, comment, userId, itemId];
+    const sql = 'UPDATE items SET itemName = ?, itemPrice = ?, itemType = ?, itemCategory = ?, comment = ? WHERE userId = ? AND id = ?';
+
+    config.query(sql, data, (err, rows) => {
+        if(err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 503, "error": null, "response": '更新失敗...。'}));
+        } else {
+            res.send(JSON.stringify({
+                "status": 200,
+                "error": null,
+                "response": rows
+            }));
+        }
+    });
+});
   
 app.listen(port, () => {
     console.log(`listening on *:${port}`);
