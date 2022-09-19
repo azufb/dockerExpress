@@ -1,7 +1,11 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import itemCategoryData from "../jsData/itemCategoryData";
 
 const EditItem = (props) => {
+    const paramObj = useParams();
+
     const { register, handleSubmit } = useForm({
         defaultValues: {
             itemName: props.defaultItemName,
@@ -12,11 +16,28 @@ const EditItem = (props) => {
         }
     });
 
-    console.log(props);
+    const updateData = async (data) => {
+        const param = {
+            userId: paramObj.userId,
+            itemId: paramObj.itemId,
+            itemName: data.itemName,
+            itemPrice: data.itemPrice,
+            itemType: data.itemType,
+            itemCategory: data.itemCategory,
+            comment: data.comment
+        };
+
+        await axios
+        .post('http://localhost:6868/updateItemData', param)
+        .then((res) => {
+            console.log('res:', res.data.response);
+        });
+    }
+
     return (
         <>
             <h1>商品編集</h1>
-            <form>
+            <form onSubmit={handleSubmit(updateData)}>
                 <label>商品名:</label>
                 <input {...register('itemName')} />
                 <label>価格:</label>
@@ -36,6 +57,9 @@ const EditItem = (props) => {
                 </select>
                 <label>コメント:</label>
                 <input {...register('comment')} />
+                <div>
+                    <button type='submit'>更新</button>
+                </div>
             </form>
         </>
     );
