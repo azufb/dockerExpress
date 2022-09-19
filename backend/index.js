@@ -129,6 +129,27 @@ app.post('/getItems', (req, res) => {
     });
 });
 
+app.post('/getItem', (req, res) => {
+    const userId = req.body.userId;
+    const itemId = req.body.itemId;
+    const data = [userId, itemId];
+    const sql = "SELECT * FROM items WHERE userId = ? AND id = ?";
+
+    config.query(sql, data, (err, rows) => {
+        if(err) throw err;
+
+        if (rows.length === 0) {
+            res.send(JSON.stringify({"status": 503, "error": null, "response": '取得失敗...。'}));
+        } else {
+            res.send(JSON.stringify({
+                "status": 200,
+                "error": null,
+                "response": rows[0]
+            }));
+        }
+    });
+});
+
 app.post('/deleteItems', (req, res) => {
     const userId = req.body.userId;
     const itemId = req.body.itemId;
