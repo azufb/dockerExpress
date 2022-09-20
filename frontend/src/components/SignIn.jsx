@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 const SignIn = () => {
     const { register, handleSubmit } = useForm();
+    const [passVisible, setPassVisible] = useState(false);
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
@@ -19,7 +20,11 @@ const SignIn = () => {
         if (signInRes.data.status === 200) {
             navigate(`/Authenticated/${signInRes.data.response.id}`);
         }
-    }
+    };
+
+    const handlePassVisibleHidden = () => {
+        setPassVisible((state) => !state);
+    };
 
     return (
         <div>
@@ -28,8 +33,11 @@ const SignIn = () => {
                 <label>email:</label>
                 <input {...register('email')} />
                 <label>password:</label>
-                <input {...register('password')} />
-                <input type='submit' />
+                <input type={passVisible ? 'text' : 'password'} {...register('password')} />
+                <button type='button' onClick={handlePassVisibleHidden}>表示</button>
+                <div>
+                    <input type='submit' />
+                </div>
             </form>
         </div>
     )
