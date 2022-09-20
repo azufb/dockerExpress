@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
-import { itemDetailAtom } from "../atoms/itemAtom";
+import { itemDetailAtom, itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import { isOpenModalsAtom } from '../atoms/isOpenModals';
 import EditItem from './EditItem';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import axios from 'axios';
 const ItemDetail = () => {
     const [isOpenEditModal, setIsOpenEditItemModal] = useRecoilState(isOpenModalsAtom);
     const [itemDetail, setItemDetail] = useRecoilState(itemDetailAtom);
+    const itemDetailUpdateTime = useRecoilValue(itemDetailUpdateTimeAtom);
     const paramObj = useParams();
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const ItemDetail = () => {
         };
 
         getItem();
-    }, [paramObj.itemId, paramObj.userId, setItemDetail]);
+    }, [paramObj.itemId, paramObj.userId, setItemDetail, itemDetailUpdateTime]);
 
     const openEditItemModal = () => {
         const paramBool = {
