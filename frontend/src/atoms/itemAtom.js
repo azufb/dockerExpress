@@ -15,3 +15,8 @@ export const itemDetailAtom = atom({
         comment: ''
     }
 });
+
+export const itemDetailUpdateTimeAtom = atom({
+    key: 'itemDetailUpdateTime',
+    default: new Date()
+});
