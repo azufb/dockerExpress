@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import itemCategoryData from "../jsData/itemCategoryData";
 
 const EditItem = (props) => {
+    const setItemDetailUpdateTime = useSetRecoilState(itemDetailUpdateTimeAtom);
     const paramObj = useParams();
 
     const { register, handleSubmit } = useForm({
@@ -30,7 +33,9 @@ const EditItem = (props) => {
         await axios
         .post('http://localhost:6868/updateItemData', param)
         .then((res) => {
-            console.log('res:', res.data.response);
+            console.log(res.data);
+            const now = new Date();
+            setItemDetailUpdateTime(now);
         });
     }
 
