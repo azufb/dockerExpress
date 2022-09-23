@@ -1,20 +1,19 @@
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import itemCategoryData from "../jsData/itemCategoryData";
-import { Input, Select, Textarea } from "@chakra-ui/react";
+import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
 
 const EditItem = (props) => {
     const setItemDetailUpdateTime = useSetRecoilState(itemDetailUpdateTimeAtom);
     const paramObj = useParams();
 
-    const { register, handleSubmit } = useForm({
+    const { register, handleSubmit, control } = useForm({
         defaultValues: {
             itemName: props.defaultItemName,
             itemPrice: props.defaultItemPrice,
-            itemType: props.defaultItemType,
             itemCategory: props.defaultItemCategory,
             comment: props.defaultComment
         }
@@ -49,11 +48,17 @@ const EditItem = (props) => {
                 <label>価格:</label>
                 <Input {...register('itemPrice')} />
                 <label>分類:</label>
-                <Select {...register('itemType')}>
-                    <option value='' selected>選択してください</option>
-                    <option value='actual'>現品</option>
-                    <option value='sample'>サンプル</option>
-                </Select>
+                <Controller
+                    name='itemType'
+                    render= {({ field }) => (
+                        <RadioGroup { ...field }>
+                            <Radio value='actual'>現品</Radio>
+                            <Radio value='sample'>サンプル</Radio>
+                        </RadioGroup>
+                    )}
+                    control={control}
+                    defaultValue={props.defaultItemType}
+                />
                 <label>カテゴリー:</label>
                 <Select {...register('itemCategory')}>
                     <option value='' selected>選択してください</option>

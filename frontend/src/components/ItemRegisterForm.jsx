@@ -1,10 +1,10 @@
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import itemCategoryData from "../jsData/itemCategoryData";
 import { useSetRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import { Input, Select, Textarea } from "@chakra-ui/react";
+import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
 
 const ItemRegisterForm = () => {
     const { register, handleSubmit, control } = useForm({
@@ -13,7 +13,6 @@ const ItemRegisterForm = () => {
                 {
                     itemName: '',
                     itemPrice: '',
-                    itemType: '',
                     itemCategory: '',
                     comment: ''
                 }
@@ -76,11 +75,17 @@ const ItemRegisterForm = () => {
                             <label>価格:</label>
                             <Input {...register(`itemRegister.${index}.itemPrice`)} />
                             <label>分類:</label>
-                            <Select {...register(`itemRegister.${index}.itemType`)}>
-                                <option value='' selected>選択してください</option>
-                                <option value='actual'>現品</option>
-                                <option value='sample'>サンプル</option>
-                            </Select>
+                            <Controller
+                                name={`itemRegister.${index}.itemType`}
+                                render= {({ field }) => (
+                                    <RadioGroup { ...field } defaultValue='actual'>
+                                        <Radio value='actual'>現品</Radio>
+                                        <Radio value='sample'>サンプル</Radio>
+                                    </RadioGroup>
+                                )}
+                                control={control}
+                                defaultValue='actual'
+                            />
                             <label>カテゴリー:</label>
                             <Select {...register(`itemRegister.${index}.itemCategory`)}>
                                 <option value='' selected>選択してください</option>
