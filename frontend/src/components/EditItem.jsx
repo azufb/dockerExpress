@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import itemCategoryData from "../jsData/itemCategoryData";
+import { Input, Textarea } from "@chakra-ui/react";
 
 const EditItem = (props) => {
     const setItemDetailUpdateTime = useSetRecoilState(itemDetailUpdateTimeAtom);
@@ -44,9 +45,9 @@ const EditItem = (props) => {
             <h1>商品編集</h1>
             <form onSubmit={handleSubmit(updateData)}>
                 <label>商品名:</label>
-                <input {...register('itemName')} />
+                <Input {...register('itemName')} />
                 <label>価格:</label>
-                <input {...register('itemPrice')} />
+                <Input {...register('itemPrice')} />
                 <label>分類:</label>
                 <select {...register('itemType')}>
                     <option value='' selected>選択してください</option>
@@ -61,7 +62,7 @@ const EditItem = (props) => {
                     ))}
                 </select>
                 <label>コメント:</label>
-                <input {...register('comment')} />
+                <Textarea {...register('comment')} />
                 <div>
                     <button type='submit'>更新</button>
                 </div>

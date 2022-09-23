@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import { Input, Textarea } from "@chakra-ui/react";
 
 const ItemRegisterForm = () => {
     const { register, handleSubmit, control } = useForm({
@@ -71,9 +72,9 @@ const ItemRegisterForm = () => {
                     {fields.map((form, index) => (
                         <div key={index}>
                             <label>商品名:</label>
-                            <input {...register(`itemRegister.${index}.itemName`)} />
+                            <Input {...register(`itemRegister.${index}.itemName`)} />
                             <label>価格:</label>
-                            <input {...register(`itemRegister.${index}.itemPrice`)} />
+                            <Input {...register(`itemRegister.${index}.itemPrice`)} />
                             <label>分類:</label>
                             <select {...register(`itemRegister.${index}.itemType`)}>
                                 <option value='' selected>選択してください</option>
@@ -88,7 +89,7 @@ const ItemRegisterForm = () => {
                                 ))}
                             </select>
                             <label>コメント:</label>
-                            <input {...register(`itemRegister.${index}.comment`)} />
+                            <Textarea {...register(`itemRegister.${index}.comment`)} />
                         </div>
                     ))}
                 </div>

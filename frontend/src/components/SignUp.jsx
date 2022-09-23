@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { Input } from '@chakra-ui/react';
 import axios from 'axios';
 
 const SignUp = () => {
@@ -34,11 +35,11 @@ const SignUp = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <label>name:</label>
-            <input {...register('name')} />
+            <Input {...register('name')} />
             <label>email:</label>
-            <input {...register('email')} />
+            <Input {...register('email')} />
             <label>password:</label>
-            <input {...register('password')} />
+            <Input {...register('password')} />
             <input type='submit' />
         </form>
     )
