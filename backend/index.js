@@ -4,6 +4,7 @@ const mysql2 = require('mysql2');
 const app = express();
 const cors = require('cors');
 const bcryptjs = require('bcryptjs');
+const nodemailer = require('nodemailer');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
