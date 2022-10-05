@@ -11,6 +11,7 @@ const SignUp = () => {
     const onSubmit = async (data) => {
         let checkRes;
         let signUpRes;
+        let userId;
         await axios
             .post('http://localhost:6868/check', data)
             .then(res => {
@@ -24,11 +25,19 @@ const SignUp = () => {
             .then(res => {
                 console.log(res);
                 signUpRes = res;
+                userId = signUpRes.data.response.insertId;
             });
-            navigate(`/Authenticated/${signUpRes.data.response.insertId}`);
-
         } else {
             console.log('データが存在したみたいです。');
+        }
+
+        if (signUpRes.status === 200) {
+            navigate(`/Authenticated/${userId}`);
+            await axios
+            .post('http://localhost:6868/sendEmail', data)
+            .then(res => {
+                console.log(res);
+            });
         }
     }
 
