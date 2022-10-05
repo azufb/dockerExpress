@@ -20,6 +20,25 @@ const config = mysql2.createConnection({
 
 config.connect();
 
+// SMTP設定
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.TEST_MAIL_USER,
+        pass: process.env.TEST_MAIL_PASS,
+    },
+});
+
+const data = {
+    from: 'curiousazunas@gmail.com',
+    to: 'curiousazunas@gmail.com',
+    text: "テキストメール本文\nテキストメール本文\nテキストメール本文",
+    html: 'HTMLメール本文<br>HTMLメール本文<br>HTMLメール本文',
+    subject: 'メール件名',
+};
+
 config.query(createUsersTable);
 config.query(createItemsTable);
 
@@ -37,6 +56,15 @@ app.use(function(req, res, next) {
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+
+app.post('/sendEmail', (req, res) => {
+    const userId = req.body.userId;
+    transporter.sendMail(data, (err, info) => {
+        if (err) throw err;
+        
+        console.log(info);
+    })
+});
 
 app.post('/check', (req, res) => {
     const name = req.body.name;
