@@ -34,6 +34,7 @@ const ItemList = () => {
                             itemPrice: responseItem.itemPrice,
                             itemType: responseItem.itemType,
                             itemCategory: responseItem.itemCategory,
+                            itemOpenDate: responseItem.itemOpenDate,
                             comment: responseItem.comment
                         }
                     ];
@@ -42,7 +43,45 @@ const ItemList = () => {
                 });
 
                 setItemList(list);
+
+                // 本日の日付
+                const today = new Date();
+                const todayTime = today.getTime();
+                const deadlineMonthDefault = parseInt(process.env.REACT_APP_DEADLINE_DEFAULT);
+
+
+                Promise.all(list.map(async (listData) => {
+                    const listItemOpenDate = new Date(listData.itemOpenDate);
+                    const itemOpenDateMonth = listItemOpenDate.getMonth();
+                    const deadlineDate = listItemOpenDate.setMonth(itemOpenDateMonth + Number(deadlineMonthDefault));
+
+                    
+                    const mailParam = {
+                        itemId: listData.itemId,
+                        itemName: listData.itemName
+                    };
+
+                    if (deadlineDate <= todayTime) {
+                        console.log('期限日:', deadlineDate);
+                        console.log('今日:', todayTime);
+                        console.log('設定af1:', listItemOpenDate);
+                        await axios
+                        .post('http://localhost:6868/sendEmail', mailParam)
+                        .then((res) => {
+                            console.log(res);
+                            console.log('メール通知実行。');
+                        });
+                    } else {
+                        console.log('期限日:', deadlineDate);
+                        console.log('今日:', todayTime);
+                        console.log('通知不要。');
+                        console.log('設定af2:', listItemOpenDate);
+                    }
+                }));
+                
             });
+
+
         };
         getItems();
     }, [paramObj.userId]);
