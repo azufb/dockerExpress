@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
-const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, comment VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, comment VARCHAR(100) NOT NULL)';
 
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
@@ -31,14 +31,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const data = {
-    from: 'curiousazunas@gmail.com',
-    to: 'curiousazunas@gmail.com',
-    text: "テキストメール本文\nテキストメール本文\nテキストメール本文",
-    html: 'HTMLメール本文<br>HTMLメール本文<br>HTMLメール本文',
-    subject: 'メール件名',
-};
-
 config.query(createUsersTable);
 config.query(createItemsTable);
 
@@ -58,7 +50,17 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/sendEmail', (req, res) => {
-    const userId = req.body.userId;
+    const itemId = req.body.itemId;
+    const itemName = req.body.itemName;
+
+    const data = {
+        from: process.env.TEST_MAIL_FROM,
+        to: process.env.TEST_MAIL_TO,
+        text: `itemId${itemId}の${itemName}が期限切れです。`,
+        html: `itemId${itemId}の${itemName}が期限切れです。`,
+        subject: 'メール件名',
+    };
+
     transporter.sendMail(data, (err, info) => {
         if (err) throw err;
         
@@ -134,8 +136,11 @@ app.post('/registerItem', (req, res) => {
         const itemType = request.itemType;
         const itemCategory = request.itemCategory;
         const comment = request.comment;
-        const data = [userId, itemName, itemPrice, itemType, itemCategory, comment];
-        const sql = 'INSERT INTO items(userId, itemName, itemPrice, itemType, itemCategory, comment) VALUES(?, ?, ?, ?, ?, ?)';
+
+        const now = new Date();
+        const itemOpenDate = now;
+        const data = [userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, comment];
+        const sql = 'INSERT INTO items(userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, comment) VALUES(?, ?, ?, ?, ?, ?, ?);';
 
         config.query(sql, data, (err, results) => {
             if (err) throw err;
