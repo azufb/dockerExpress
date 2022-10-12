@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
-const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, customItemUseDeadLine INT, comment VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, customItemUseDeadline CHAR(2), comment VARCHAR(100) NOT NULL)';
 
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
@@ -135,12 +135,13 @@ app.post('/registerItem', (req, res) => {
         const itemPrice = request.itemPrice;
         const itemType = request.itemType;
         const itemCategory = request.itemCategory;
+        const customItemUseDeadline = request.customItemUseDeadline;
         const comment = request.comment;
 
         const now = new Date();
         const itemOpenDate = now;
-        const data = [userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, comment];
-        const sql = 'INSERT INTO items(userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, comment) VALUES(?, ?, ?, ?, ?, ?, ?);';
+        const data = [userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, customItemUseDeadline, comment];
+        const sql = 'INSERT INTO items(userId, itemName, itemPrice, itemType, itemCategory, itemOpenDate, customItemUseDeadline, comment) VALUES(?, ?, ?, ?, ?, ?, ?, ?);';
 
         config.query(sql, data, (err, results) => {
             if (err) throw err;
@@ -243,7 +244,7 @@ app.post('/updateItemData', (req, res) => {
     const userId = req.body.userId;
     const itemId = req.body.itemId;
     const data = [itemName, itemPrice, itemType, itemCategory, customItemUseDeadline, comment, userId, itemId];
-    const sql = 'UPDATE items SET itemName = ?, itemPrice = ?, itemType = ?, itemCategory = ?, customItemUseDeadLine = ?, comment = ? WHERE userId = ? AND id = ?';
+    const sql = 'UPDATE items SET itemName = ?, itemPrice = ?, itemType = ?, itemCategory = ?, customItemUseDeadline = ?, comment = ? WHERE userId = ? AND id = ?';
 
     config.query(sql, data, (err, rows) => {
         if(err) throw err;
