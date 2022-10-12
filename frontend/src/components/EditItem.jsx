@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import itemCategoryData from "../jsData/itemCategoryData";
+import customItemUseDeadlineOptions from '../jsData/customItemUseDeadlineOptions'; 
 import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
 
 const EditItem = (props) => {
@@ -27,6 +28,7 @@ const EditItem = (props) => {
             itemPrice: data.itemPrice,
             itemType: data.itemType,
             itemCategory: data.itemCategory,
+            customItemUseDeadline: data.customItemUseDeadline,
             comment: data.comment
         };
 
@@ -64,6 +66,16 @@ const EditItem = (props) => {
                     <option value='' selected>選択してください</option>
                     {itemCategoryData.map((category, index) => (
                         <option key={index} value={category.value}>{category.name}</option>
+                    ))}
+                </Select>
+                <label>使用期限</label>
+                <Select  {...register('customItemUseDeadline')}>
+                    <option value='' selected>選択してください</option>
+                    {customItemUseDeadlineOptions.map((deadline, index) => (
+                        <option key={index} value={deadline.value}>
+                            {deadline.value}
+                            {deadline.data !== '' && ((deadline.data))}
+                        </option>
                     ))}
                 </Select>
                 <label>コメント:</label>
