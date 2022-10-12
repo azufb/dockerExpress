@@ -33,6 +33,7 @@ const ItemDetail = () => {
                     itemPrice: resData.response.itemPrice,
                     itemType: resData.response.itemType,
                     itemCategory: resData.response.itemCategory,
+                    customItemUseDeadline: (resData.response.customItemUseDeadline).toString(),
                     comment: resData.response.comment
                 }
 
@@ -76,6 +77,7 @@ const ItemDetail = () => {
                         defaultItemPrice={itemDetail.itemPrice}
                         defaultItemType={itemDetail.itemType}
                         defaultItemCategory={itemDetail.itemCategory}
+                        defaultCustomItemUseDeadline={itemDetail.customItemUseDeadline}
                         defaultComment={itemDetail.comment}
                     />
                 )}
