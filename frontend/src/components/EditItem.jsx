@@ -11,11 +11,14 @@ const EditItem = (props) => {
     const setItemDetailUpdateTime = useSetRecoilState(itemDetailUpdateTimeAtom);
     const paramObj = useParams();
 
+    console.log(props.defaultCustomItemUseDeadline);
+
     const { register, handleSubmit, control } = useForm({
         defaultValues: {
             itemName: props.defaultItemName,
             itemPrice: props.defaultItemPrice,
             itemCategory: props.defaultItemCategory,
+            customItemUseDeadline: props.defaultCustomItemUseDeadline,
             comment: props.defaultComment
         }
     });
@@ -63,18 +66,18 @@ const EditItem = (props) => {
                 />
                 <label>カテゴリー:</label>
                 <Select {...register('itemCategory')}>
-                    <option value='' selected>選択してください</option>
+                    <option value=''>選択してください</option>
                     {itemCategoryData.map((category, index) => (
                         <option key={index} value={category.value}>{category.name}</option>
                     ))}
                 </Select>
                 <label>使用期限</label>
                 <Select  {...register('customItemUseDeadline')}>
-                    <option value='' selected>選択してください</option>
+                    <option value=''>選択してください</option>
                     {customItemUseDeadlineOptions.map((deadline, index) => (
                         <option key={index} value={deadline.value}>
-                            {deadline.value}
-                            {deadline.data !== '' && ((deadline.data))}
+                            {deadline.value}ヶ月
+                            {deadline.data !== '' && <span>({deadline.data})</span>}
                         </option>
                     ))}
                 </Select>

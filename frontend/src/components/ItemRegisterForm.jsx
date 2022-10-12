@@ -5,6 +5,7 @@ import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
+import customItemUseDeadlineOptions from '../jsData/customItemUseDeadlineOptions';
 
 const ItemRegisterForm = () => {
     const { register, handleSubmit, control } = useForm({
@@ -14,6 +15,7 @@ const ItemRegisterForm = () => {
                     itemName: '',
                     itemPrice: '',
                     itemCategory: '',
+                    customItemUseDeadline: '',
                     comment: ''
                 }
             ]
@@ -30,7 +32,7 @@ const ItemRegisterForm = () => {
 
     const appendForm = () => {
         if (fields.length + 1 <= 10) {
-            return append({ itemName: '', itemPrice: '', itemType: '', itemCategory: '', comment: '' });
+            return append({ itemName: '', itemPrice: '', itemType: '', itemCategory: '', customItemUseDeadline: '', comment: '' });
         }
     }
 
@@ -49,6 +51,7 @@ const ItemRegisterForm = () => {
                     itemPrice: item.itemPrice,
                     itemType: item.itemType,
                     itemCategory: item.itemCategory,
+                    customItemUseDeadline: item.customItemUseDeadline,
                     comment: item.comment
                 }
             ];
@@ -78,19 +81,28 @@ const ItemRegisterForm = () => {
                             <Controller
                                 name={`itemRegister.${index}.itemType`}
                                 render= {({ field }) => (
-                                    <RadioGroup { ...field } defaultValue='actual'>
+                                    <RadioGroup { ...field }>
                                         <Radio value='actual'>現品</Radio>
                                         <Radio value='sample'>サンプル</Radio>
                                     </RadioGroup>
                                 )}
                                 control={control}
-                                defaultValue='actual'
                             />
                             <label>カテゴリー:</label>
                             <Select {...register(`itemRegister.${index}.itemCategory`)}>
                                 <option value='' selected>選択してください</option>
                                 {itemCategoryData.map((category, index) => (
                                     <option key={index} value={category.value}>{category.name}</option>
+                                ))}
+                            </Select>
+                            <label>使用期限</label>
+                            <Select  {...register(`itemRegister.${index}.customItemUseDeadline`)}>
+                                <option value='' selected>選択してください</option>
+                                {customItemUseDeadlineOptions.map((deadline, index) => (
+                                    <option key={index} value={deadline.value}>
+                                        {deadline.value}
+                                        {deadline.data !== '' && <span>({deadline.data})</span>}
+                                    </option>
                                 ))}
                             </Select>
                             <label>コメント:</label>
