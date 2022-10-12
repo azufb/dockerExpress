@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
-const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, comment VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, customItemUseDeadLine INT, comment VARCHAR(100) NOT NULL)';
 
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
@@ -238,11 +238,12 @@ app.post('/updateItemData', (req, res) => {
     const itemPrice = req.body.itemPrice;
     const itemType = req.body.itemType;
     const itemCategory = req.body.itemCategory;
+    const customItemUseDeadline = req.body.customItemUseDeadline;
     const comment = req.body.comment;
     const userId = req.body.userId;
     const itemId = req.body.itemId;
-    const data = [itemName, itemPrice, itemType, itemCategory, comment, userId, itemId];
-    const sql = 'UPDATE items SET itemName = ?, itemPrice = ?, itemType = ?, itemCategory = ?, comment = ? WHERE userId = ? AND id = ?';
+    const data = [itemName, itemPrice, itemType, itemCategory, customItemUseDeadline, comment, userId, itemId];
+    const sql = 'UPDATE items SET itemName = ?, itemPrice = ?, itemType = ?, itemCategory = ?, customItemUseDeadLine = ?, comment = ? WHERE userId = ? AND id = ?';
 
     config.query(sql, data, (err, rows) => {
         if(err) throw err;
