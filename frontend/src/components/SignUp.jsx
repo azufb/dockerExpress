@@ -27,17 +27,10 @@ const SignUp = () => {
                 signUpRes = res;
                 userId = signUpRes.data.response.insertId;
             });
+
+            navigate(`/Authenticated/${userId}`);
         } else {
             console.log('データが存在したみたいです。');
-        }
-
-        if (signUpRes.status === 200) {
-            navigate(`/Authenticated/${userId}`);
-            await axios
-            .post('http://localhost:6868/sendEmail', data)
-            .then(res => {
-                console.log(res);
-            });
         }
     }
 
