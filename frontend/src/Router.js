@@ -6,7 +6,7 @@ import Authenticated from './components/Authenticated';
 import ItemDetail from './components/ItemDetail';
 import ItemList from './components/ItemList';
 import ItemRegisterForm from './components/ItemRegisterForm';
-import EditUserData from './components/EditUserData';
+import UserData from './components/UserData';
 
 const Router = () => {
     return (
@@ -19,7 +19,7 @@ const Router = () => {
                     <Route path='ItemList' element={<ItemList />} />
                     <Route path='ItemRegisterForm' element={<ItemRegisterForm />} />
                     <Route path='ItemDetail/:itemId' element={<ItemDetail />} />
-                    <Route path='EditUserData' element={<EditUserData />} />
+                    <Route path='UserData' element={<UserData />} />
                 </Route>
             </Routes>
         </BrowserRouter>
