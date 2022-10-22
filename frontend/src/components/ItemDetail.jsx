@@ -46,11 +46,10 @@ const ItemDetail = () => {
     }, [paramObj.itemId, paramObj.userId, setItemDetail, itemDetailUpdateTime]);
 
     const openEditItemModal = () => {
-        const paramBool = {
+        setIsOpenEditItemModal((currentState) => ({
+            ...currentState,
             editItemModal: true
-        };
-
-        setIsOpenEditItemModal(paramBool);
+        }));
     };
 
     return (
