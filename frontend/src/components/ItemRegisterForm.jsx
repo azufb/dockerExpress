@@ -4,7 +4,6 @@ import { useSetRecoilState } from "recoil";
 import { itemListAtom } from "../atoms/itemAtom";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
 import customItemUseDeadlineOptions from '../jsData/customItemUseDeadlineOptions';
 
 const ItemRegisterForm = () => {
@@ -74,29 +73,29 @@ const ItemRegisterForm = () => {
                     {fields.map((form, index) => (
                         <div key={index}>
                             <label>商品名:</label>
-                            <Input {...register(`itemRegister.${index}.itemName`)} />
+                            <input {...register(`itemRegister.${index}.itemName`)} />
                             <label>価格:</label>
-                            <Input {...register(`itemRegister.${index}.itemPrice`)} />
+                            <input {...register(`itemRegister.${index}.itemPrice`)} />
                             <label>分類:</label>
                             <Controller
                                 name={`itemRegister.${index}.itemType`}
                                 render= {({ field }) => (
-                                    <RadioGroup { ...field }>
-                                        <Radio value='actual'>現品</Radio>
-                                        <Radio value='sample'>サンプル</Radio>
-                                    </RadioGroup>
+                                    <radio { ...field }>
+                                        <input value='actual'>現品</input>
+                                        <input value='sample'>サンプル</input>
+                                    </radio>
                                 )}
                                 control={control}
                             />
                             <label>カテゴリー:</label>
-                            <Select {...register(`itemRegister.${index}.itemCategory`)}>
+                            <select {...register(`itemRegister.${index}.itemCategory`)}>
                                 <option value='' selected>選択してください</option>
                                 {itemCategoryData.map((category, index) => (
                                     <option key={index} value={category.value}>{category.name}</option>
                                 ))}
-                            </Select>
+                            </select>
                             <label>使用期限</label>
-                            <Select  {...register(`itemRegister.${index}.customItemUseDeadline`)}>
+                            <select  {...register(`itemRegister.${index}.customItemUseDeadline`)}>
                                 <option value='' selected>選択してください</option>
                                 {customItemUseDeadlineOptions.map((deadline, index) => (
                                     <option key={index} value={deadline.value}>
@@ -104,9 +103,9 @@ const ItemRegisterForm = () => {
                                         {deadline.data !== '' && <span>({deadline.data})</span>}
                                     </option>
                                 ))}
-                            </Select>
+                            </select>
                             <label>コメント:</label>
-                            <Textarea {...register(`itemRegister.${index}.comment`)} />
+                            <textarea {...register(`itemRegister.${index}.comment`)} />
                         </div>
                     ))}
                 </div>

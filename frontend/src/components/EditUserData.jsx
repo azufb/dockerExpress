@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { Input } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { userState } from "../atoms/userAtom";
@@ -47,11 +46,11 @@ const EditUserData = (props) => {
         <div>
             <form onSubmit={handleSubmit(updateUserData)}>
                 <label>name:</label>
-                <Input {...register('name')} />
+                <input {...register('name')} />
                 <label>email:</label>
-                <Input {...register('email')} />
+                <input {...register('email')} />
                 <label>password:</label>
-                <Input {...register('password')} />
+                <input {...register('password')} />
                 <input type='submit' />
             </form>
         </div>

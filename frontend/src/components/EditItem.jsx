@@ -4,8 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { itemDetailUpdateTimeAtom } from "../atoms/itemAtom";
 import itemCategoryData from "../jsData/itemCategoryData";
-import customItemUseDeadlineOptions from '../jsData/customItemUseDeadlineOptions'; 
-import { Input, RadioGroup, Radio, Select, Textarea } from "@chakra-ui/react";
+import customItemUseDeadlineOptions from '../jsData/customItemUseDeadlineOptions';
 
 const EditItem = (props) => {
     const setItemDetailUpdateTime = useSetRecoilState(itemDetailUpdateTimeAtom);
@@ -49,30 +48,30 @@ const EditItem = (props) => {
             <h1>商品編集</h1>
             <form onSubmit={handleSubmit(updateData)}>
                 <label>商品名:</label>
-                <Input {...register('itemName')} />
+                <input {...register('itemName')} />
                 <label>価格:</label>
-                <Input {...register('itemPrice')} />
+                <input {...register('itemPrice')} />
                 <label>分類:</label>
                 <Controller
                     name='itemType'
                     render= {({ field }) => (
-                        <RadioGroup { ...field }>
-                            <Radio value='actual'>現品</Radio>
-                            <Radio value='sample'>サンプル</Radio>
-                        </RadioGroup>
+                        <radio { ...field }>
+                            <input value='actual'>現品</input>
+                            <input value='sample'>サンプル</input>
+                        </radio>
                     )}
                     control={control}
                     defaultValue={props.defaultItemType}
                 />
                 <label>カテゴリー:</label>
-                <Select {...register('itemCategory')}>
+                <select {...register('itemCategory')}>
                     <option value=''>選択してください</option>
                     {itemCategoryData.map((category, index) => (
                         <option key={index} value={category.value}>{category.name}</option>
                     ))}
-                </Select>
+                </select>
                 <label>使用期限</label>
-                <Select  {...register('customItemUseDeadline')}>
+                <select  {...register('customItemUseDeadline')}>
                     <option value=''>選択してください</option>
                     {customItemUseDeadlineOptions.map((deadline, index) => (
                         <option key={index} value={deadline.value}>
@@ -80,9 +79,9 @@ const EditItem = (props) => {
                             {deadline.data !== '' && <span>({deadline.data})</span>}
                         </option>
                     ))}
-                </Select>
+                </select>
                 <label>コメント:</label>
-                <Textarea {...register('comment')} />
+                <textarea {...register('comment')} />
                 <div>
                     <button type='submit'>更新</button>
                 </div>

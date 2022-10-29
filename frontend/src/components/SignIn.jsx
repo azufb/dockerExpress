@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Input } from '@chakra-ui/react';
 import axios from 'axios';
 
 const SignIn = () => {
@@ -32,9 +31,9 @@ const SignIn = () => {
             <h2>サインインする！</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label>email:</label>
-                <Input {...register('email')} />
+                <input {...register('email')} />
                 <label>password:</label>
-                <Input type={passVisible ? 'text' : 'password'} {...register('password')} />
+                <input type={passVisible ? 'text' : 'password'} {...register('password')} />
                 <button type='button' onClick={handlePassVisibleHidden}>表示</button>
                 <div>
                     <input type='submit' />
