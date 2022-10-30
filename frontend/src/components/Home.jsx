@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
+import { HomeNavigationButtons } from '../styles/HomeStyle';
 
 const Home = () => {
     return (
         <div>
-            <h1>Homeです。</h1>
-            <nav>
-                <ul>
-                    <li><Link to='SignUp'>サインアップ</Link></li>
-                    <li><Link to='SignIn'>サインイン</Link></li>
-                </ul>
-            </nav>
+            <HomeNavigationButtons>
+                <div>
+                    <Link to='SignUp'>サインアップ</Link>
+                </div>
+                <div>
+                    <Link to='SignIn'>サインイン</Link>
+                </div>
+            </HomeNavigationButtons>
         </div>
     )
 }
