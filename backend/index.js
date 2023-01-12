@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.NODE_DOCKER_PORT || 8080;
 
 const createUsersTable = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)';
-const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, customItemUseDeadline CHAR(2), comment VARCHAR(100) NOT NULL)';
+const createItemsTable = 'CREATE TABLE IF NOT EXISTS items (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, userId INT NOT NULL, itemName VARCHAR(100) NOT NULL, itemPrice VARCHAR(100) NOT NULL, itemType VARCHAR(100) NOT NULL, itemCategory VARCHAR(100) NOT NULL, itemOpenDate DATE NOT NULL, customItemUseDeadline INT, comment VARCHAR(100) NOT NULL)';
 
 const config = mysql2.createConnection({
     host: process.env.DB_HOST,
@@ -135,7 +135,7 @@ app.post('/registerItem', (req, res) => {
         const itemPrice = request.itemPrice;
         const itemType = request.itemType;
         const itemCategory = request.itemCategory;
-        const customItemUseDeadline = request.customItemUseDeadline;
+        const customItemUseDeadline = request.customItemUseDeadline === '' ? 0 : request.customItemUseDeadline;
         const comment = request.comment;
 
         const now = new Date();
@@ -239,7 +239,7 @@ app.post('/updateItemData', (req, res) => {
     const itemPrice = req.body.itemPrice;
     const itemType = req.body.itemType;
     const itemCategory = req.body.itemCategory;
-    const customItemUseDeadline = req.body.customItemUseDeadline;
+    const customItemUseDeadline = req.body.customItemUseDeadline === '' ? 0 : req.body.customItemUseDeadline;
     const comment = req.body.comment;
     const userId = req.body.userId;
     const itemId = req.body.itemId;
