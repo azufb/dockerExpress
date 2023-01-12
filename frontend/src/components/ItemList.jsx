@@ -35,6 +35,7 @@ const ItemList = () => {
                             itemType: responseItem.itemType,
                             itemCategory: responseItem.itemCategory,
                             itemOpenDate: responseItem.itemOpenDate,
+                            customItemUseDeadline: responseItem.customItemUseDeadline,
                             comment: responseItem.comment
                         }
                     ];
@@ -47,13 +48,11 @@ const ItemList = () => {
                 // 本日の日付
                 const today = new Date();
                 const todayTime = today.getTime();
-                const deadlineMonthDefault = parseInt(process.env.REACT_APP_DEADLINE_DEFAULT);
 
 
                 Promise.all(list.map(async (listData) => {
                     const listItemOpenDate = new Date(listData.itemOpenDate);
                     const itemOpenDateMonth = listItemOpenDate.getMonth();
-                    const deadlineDate = listItemOpenDate.setMonth(itemOpenDateMonth + Number(deadlineMonthDefault));
 
                     
                     const mailParam = {
@@ -61,21 +60,35 @@ const ItemList = () => {
                         itemName: listData.itemName
                     };
 
-                    if (deadlineDate <= todayTime) {
-                        console.log('期限日:', deadlineDate);
-                        console.log('今日:', todayTime);
-                        console.log('設定af1:', listItemOpenDate);
-                        await axios
-                        .post('http://localhost:6868/sendEmail', mailParam)
-                        .then((res) => {
-                            console.log(res);
-                            console.log('メール通知実行。');
-                        });
+                    // カスタム期限が設定されているかされていないかで使用期限の判断基準を分ける。(デフォルト/カスタム)
+                    if (listData.customItemUseDeadline === 0) {
+                        // カスタム期限が設定されていない場合(デフォルト期限を利用)
+                        const deadlineMonthDefault = parseInt(process.env.REACT_APP_DEADLINE_DEFAULT);
+                        const deadlineDate = listItemOpenDate.setMonth(itemOpenDateMonth + Number(deadlineMonthDefault));
+
+                        if (deadlineDate <= todayTime) {
+                            await axios
+                            .post('http://localhost:6868/sendEmail', mailParam)
+                            .then((res) => {
+                                console.log('メール通知実行。デフォルト。');
+                            });
+                        } else {
+                            console.log('通知不要。デフォルト。');
+                        }
                     } else {
-                        console.log('期限日:', deadlineDate);
-                        console.log('今日:', todayTime);
-                        console.log('通知不要。');
-                        console.log('設定af2:', listItemOpenDate);
+                        // カスタム期限が設定されている場合(カスタム期限を利用)
+                        const deadlineMonthCustom = listData.customItemUseDeadline;
+                        const deadlineDate = listItemOpenDate.setMonth(itemOpenDateMonth + Number(deadlineMonthCustom));
+
+                        if (deadlineDate <= todayTime) {
+                            await axios
+                            .post('http://localhost:6868/sendEmail', mailParam)
+                            .then((res) => {
+                                console.log('メール通知実行。カスタム。');
+                            });
+                        } else {
+                            console.log('通知不要。カスタム。');
+                        }
                     }
                 }));
                 
