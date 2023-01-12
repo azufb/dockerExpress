@@ -12,7 +12,7 @@ export const itemDetailAtom = atom({
         itemPrice: '',
         itemType: '',
         itemCategory: '',
-        customItemUseDeadline: '',
+        customItemUseDeadline: 0,
         comment: ''
     }
 });
